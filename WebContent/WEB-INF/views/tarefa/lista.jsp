@@ -11,9 +11,10 @@
 <script type="text/javascript">
 	function finalizaAgora(id)
 	{
-		$.post("finalzaTarefa",{"id" : id}, function(resposta){
+		$.post("finalizaTarefa",{"id" : id}, function(resposta){
 			
 			$("#tarefa_"+ id).html("Finalizado");
+			$("#tarefa_data_" + id).html(resposta);
 		});
 	}
 </script>
@@ -36,12 +37,12 @@
 				<td>${tarefa.id}</td>
 				<td>${tarefa.descricao}</td>
 				<core:if test="${tarefa.finalizado eq false }">
-					<td id="tarefa_${tarefa.id}"><a href="#" onclick="finalizarAgora(${tarefa.id})">Finalizar agora !</a></td>
+					<td id="tarefa_${tarefa.id}"><a href="#" onclick="finalizaAgora(${tarefa.id})">Finalizar agora !</a></td>
 				</core:if>
 				<core:if test="${tarefa.finalizado eq true }">
-					<td>FInalizado</td>
+					<td>Finalizado</td>
 				</core:if>
-				<td> <fmt:formatDate value="${tarefa.dataFinalizacao.time}" pattern="dd/MM/yyyy"/></td>
+				<td id="tarefa_data_${tarefa.id}"> <fmt:formatDate value="${tarefa.dataFinalizacao.time}" pattern="dd/MM/yyyy"/></td>
 				<td><a href="removeTarefa?id=${tarefa.id}">Remover</a></td>
 				<td><a href="mostrarTarefa?id=${tarefa.id}">Alterar</a></td>
 			</tr>
