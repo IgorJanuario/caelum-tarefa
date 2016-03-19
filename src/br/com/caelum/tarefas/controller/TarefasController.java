@@ -1,21 +1,26 @@
-			package br.com.caelum.tarefas.controller;
+package br.com.caelum.tarefas.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import br.com.caelum.tarefas.dao.JdbcTarefaDao;
+import br.com.caelum.tarefas.dao.TarefaDao;
 import br.com.caelum.tarefas.modelo.Tarefa;
 
+@Transactional
 @Controller
 public class TarefasController {
+	@Autowired
+	private TarefaDao dao;
 	
 	@RequestMapping("/novaTarefa")
 	public String form()
@@ -30,7 +35,6 @@ public class TarefasController {
 		{
 			return "tarefa/formulario";
 		}
-		JdbcTarefaDao dao = new JdbcTarefaDao();
 		dao.adiciona(tarefa);
 		
 		return "redirect:listaTarefas";
@@ -39,7 +43,6 @@ public class TarefasController {
 	@RequestMapping("/listaTarefas")
 	public String lista(Model model)
 	{
-		JdbcTarefaDao dao = new JdbcTarefaDao();
 		model.addAttribute("tarefas", dao.lista());
 		
 		return "tarefa/lista";
@@ -48,7 +51,6 @@ public class TarefasController {
 	@RequestMapping("removeTarefa")
 	public String remove(Tarefa tarefa)
 	{
-		JdbcTarefaDao dao = new JdbcTarefaDao();
 		dao.remove(tarefa);
 		return "redirect:listaTarefas";
 	}
@@ -56,7 +58,6 @@ public class TarefasController {
 	@RequestMapping("mostrarTarefa")
 	public String mostrar(Long id, Model model)
 	{
-		JdbcTarefaDao dao = new JdbcTarefaDao();
 		model.addAttribute("tarefa",dao.buscaPorId(id));
 		return "tarefa/mostra";
 	}
@@ -64,8 +65,7 @@ public class TarefasController {
 	@RequestMapping("alterarTarefa")
 	public String alterar(Tarefa tarefa)
 	{
-		JdbcTarefaDao dao = new JdbcTarefaDao();
-		dao.altera(tarefa);
+		dao.alterar(tarefa);
 		return "redirect:listaTarefas";
 	}
 	
@@ -73,7 +73,6 @@ public class TarefasController {
 	@RequestMapping("finalizaTarefa")
 	public String finaliza(Long id)
 	{
-		JdbcTarefaDao dao = new JdbcTarefaDao();
 		dao.finaliza(id);
 		
 		Date dataDeFinalizacao = dao.buscaPorId(id).getDataFinalizacao().getTime();

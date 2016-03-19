@@ -2,19 +2,32 @@ package br.com.caelum.tarefas.modelo;
 
 import java.util.Calendar;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.sun.istack.internal.NotNull;
-
+@Entity
+@Table(name="tarefas")//Hibernate e JPA
 public class Tarefa {
-	private Long id; 	
-	@NotNull()
-	@Size(min=5,message="Descrição deve ter pelo menos 5 caracteres")
+	
+	@Id //PrimaryKey
+	@GeneratedValue //AUTO_INCREMENTO
+	private Long id;
+	
+	@NotNull() //Spring MVC
+	@Size(min=5,message="Descrição deve ter pelo menos 5 caracteres") //Spring MVC
 	private String descricao;
 	private boolean finalizado;
-	@DateTimeFormat(pattern="dd/MM/yyyy")
+	@DateTimeFormat(pattern="dd/MM/yyyy") //Spring MVC
+	
+	@Temporal(TemporalType.DATE) //Pegar a data sem horas
 	private Calendar dataFinalizacao;
 
 	public Long getId() {
